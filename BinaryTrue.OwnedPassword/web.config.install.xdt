@@ -1,0 +1,12 @@
+﻿<?xml version="1.0"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+    <appSettings xdt:Transform="Insert">
+        <add key="OwnedPassword:RequiredLength" value="0" />
+        <add key="OwnedPassword:RequireNonLetterOrDigit" value="false" />
+        <add key="OwnedPassword:RequireDigit" value="false" />
+		<add key="OwnedPassword:RequireLowercase" value="false" />
+		<add key="OwnedPassword:RequireUppercase" value="false" />
+		<add key="OwnedPassword:RequireOwnedPasswordsCheck" value="true" />
+		<add key="OwnedPassword:MaxAllowedOwnedPasswords" value="0" />
+    </appSettings>
+</configuration>
