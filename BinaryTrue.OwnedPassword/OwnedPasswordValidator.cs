@@ -10,47 +10,48 @@ using EPiServer.Framework.Localization;
 
 namespace BinaryTrue.OwnedPassword
 {
-public class OwnedPasswordValidator: PasswordValidator
-{
-    private readonly LocalizationService localizationService;
-    private readonly IOwnedPasswordRepository _ownedPasswordRepository;
-    public OwnedPasswordValidator(IOwnedPasswordRepository ownedPasswordRepository) :base()
+    public class OwnedPasswordValidator : PasswordValidator
     {
-        _ownedPasswordRepository = ownedPasswordRepository;
-        localizationService = ServiceLocator.Current.GetInstance<LocalizationService>();
-    }
-    private ILogger _log = LogManager.Instance.GetLogger(typeof(OwnedPasswordValidator).ToString());
-    public string BaseUrl { get; set; } = "https://api.pwnedpasswords.com/range/";
-    public const string DefaultErrorMessage = "Your password occurs in hacked databases {0} times. Try another password!";
-    public int MaxAllowedOwnedPasswords { get; set; } = 0;
-    public const string OwnedPasswordErrorKey = "/OwnedPasswordError";
-    static HttpClient client = new HttpClient();
-    public override Task<IdentityResult> ValidateAsync(string password)
-    {
-        IdentityResult resultToReturn = IdentityResult.Success;
-        var baseResult = base.ValidateAsync(password).Result;
-        if(baseResult.Succeeded)
+        private readonly LocalizationService localizationService;
+        private readonly IOwnedPasswordRepository _ownedPasswordRepository;
+        public OwnedPasswordValidator(IOwnedPasswordRepository ownedPasswordRepository) : base()
         {
-            try
+            _ownedPasswordRepository = ownedPasswordRepository;
+            localizationService = ServiceLocator.Current.GetInstance<LocalizationService>();
+        }
+        private ILogger _log = LogManager.Instance.GetLogger(typeof(OwnedPasswordValidator).ToString());
+        public string BaseUrl { get; set; } = "https://api.pwnedpasswords.com/range/";
+        public const string DefaultErrorMessage = "Your password occurs in hacked databases {0} times. Try another password!";
+        public int MaxAllowedOwnedPasswords { get; set; } = 0;
+        public bool RequireOwnedPasswordsCheck { get; set; } = true;
+        public const string OwnedPasswordErrorKey = "/OwnedPasswordError";
+        static HttpClient client = new HttpClient();
+        public override Task<IdentityResult> ValidateAsync(string password)
+        {
+            IdentityResult resultToReturn = IdentityResult.Success;
+            var baseResult = base.ValidateAsync(password).Result;
+            if (baseResult.Succeeded && RequireOwnedPasswordsCheck)
             {
-                var ownedPasswordsCount = _ownedPasswordRepository.GetOwnedCount(password);
-                if (ownedPasswordsCount > MaxAllowedOwnedPasswords)
+                try
                 {
-                    resultToReturn = IdentityResult.Failed(string.Format(localizationService.GetString(OwnedPasswordErrorKey, DefaultErrorMessage), ownedPasswordsCount));
+                    var ownedPasswordsCount = _ownedPasswordRepository.GetOwnedCount(password);
+                    if (ownedPasswordsCount > MaxAllowedOwnedPasswords)
+                    {
+                        resultToReturn = IdentityResult.Failed(string.Format(localizationService.GetString(OwnedPasswordErrorKey, DefaultErrorMessage), ownedPasswordsCount));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _log.Error("Failed to call owned passwords service.", ex);
                 }
             }
-            catch(Exception ex)
+            else
             {
-                _log.Error("Failed to call owned passwords service.",ex);
+                resultToReturn = baseResult;
             }
+            return Task.FromResult(resultToReturn);
         }
-        else
-        {
-            resultToReturn = baseResult;
-        }
-        return Task.FromResult(resultToReturn);
     }
-}
     public class OwnedPasswordRepository : IOwnedPasswordRepository
     {
         static HttpClient client = new HttpClient();

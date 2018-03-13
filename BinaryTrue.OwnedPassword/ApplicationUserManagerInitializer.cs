@@ -16,12 +16,13 @@ namespace BinaryTrue.OwnedPassword
            
             userManager.PasswordValidator = new OwnedPasswordValidator(new OwnedPasswordRepository())
             {
-                RequiredLength =  6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
-                MaxAllowedOwnedPasswords = 0
+                RequiredLength = AppSettings.RequiredLength,
+                RequireNonLetterOrDigit = AppSettings.RequireNonLetterOrDigit,
+                RequireDigit = AppSettings.RequireDigit,
+                RequireLowercase = AppSettings.RequireLowercase,
+                RequireUppercase = AppSettings.RequireUppercase,
+                MaxAllowedOwnedPasswords = AppSettings.MaxAllowedOwnedPasswords,
+                RequireOwnedPasswordsCheck = AppSettings.RequireOwnedPasswordsCheck
             };
             return userManager;
         }
