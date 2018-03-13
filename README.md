@@ -5,13 +5,13 @@ To use:
 
 1. Install nuget package on your Episerver 11 site
 2. In Startup.cs replace the commented line below for identity based authentication:
-
+```
 //app.AddCmsAspNetIdentity<ApplicationUser>();
   
 app.AddCustomCmsAspNetIdentity<ApplicationUser>();
-  
+```
 3. If you don't have identity based authentication you can still create a custom membership provider similar to:
-
+```
     public class OwnedMembershipProvider : System.Web.Providers.DefaultMembershipProvider
     {
         private readonly LocalizationService localizationService;
@@ -45,4 +45,4 @@ app.AddCustomCmsAspNetIdentity<ApplicationUser>();
         }
 
     }
-
+```
