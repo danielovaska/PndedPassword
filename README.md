@@ -9,6 +9,7 @@ To use:
 //app.AddCmsAspNetIdentity<ApplicationUser>();
   
 app.AddCustomCmsAspNetIdentity<ApplicationUser>();
+```
 3. Set your prefered password strength in appSettings
 ```
 <add key="OwnedPassword:RequiredLength" value="0" />
