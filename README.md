@@ -9,6 +9,16 @@ To use:
 //app.AddCmsAspNetIdentity<ApplicationUser>();
   
 app.AddCustomCmsAspNetIdentity<ApplicationUser>();
+3. Set your prefered password strength in appSettings
+```
+<add key="OwnedPassword:RequiredLength" value="0" />
+<add key="OwnedPassword:RequireNonLetterOrDigit" value="false" />
+<add key="OwnedPassword:RequireDigit" value="false" />
+<add key="OwnedPassword:RequireLowercase" value="false" />
+<add key="OwnedPassword:RequireUppercase" value="false" />
+<add key="OwnedPassword:RequireOwnedPasswordsCheck" value="true" />
+<add key="OwnedPassword:MaxAllowedOwnedPasswords" value="0" />
+```
 ```
 3. If you don't have identity based authentication you can still create a custom membership provider similar to:
 ```
