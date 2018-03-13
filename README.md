@@ -20,8 +20,8 @@ app.AddCustomCmsAspNetIdentity<ApplicationUser>();
 <add key="OwnedPassword:RequireOwnedPasswordsCheck" value="true" />
 <add key="OwnedPassword:MaxAllowedOwnedPasswords" value="0" />
 ```
-```
-3. If you don't have identity based authentication you can still create a custom membership provider similar to:
+
+4. If you don't have identity based authentication you can still create a custom membership provider similar to:
 ```
     public class OwnedMembershipProvider : System.Web.Providers.DefaultMembershipProvider
     {
